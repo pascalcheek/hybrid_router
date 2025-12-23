@@ -1,0 +1,43 @@
+# Конфигурация гибридного маршрутизатора
+
+# Общие настройки
+general:
+  max_vertices: 8
+  log_level: "INFO"
+  cache_enabled: true
+  visualizations_enabled: true
+
+# Настройки квантового бэкенда
+quantum:
+  default_backend: "matrix_emulation"  # matrix_emulation, qiskit_simulator
+  grover_iterations: null  # null для автоматического расчета
+  shots: 1024  # Количество измерений для Qiskit
+  optimization_level: 1  # Уровень оптимизации Qiskit
+
+# Стратегии поиска
+strategies:
+  default: "hybrid_conservative"  # pure_classical, hybrid_conservative, hybrid_aggressive, adaptive
+  quantum_threshold: 0.9  # Порог для квантового анализа (0.0-1.0)
+  confidence_threshold: 0.15  # Порог уверенности для принятия решений
+  max_subgraph_size: 8  # Максимальный размер подграфа для анализа
+
+# Настройки сервера
+server:
+  host: "localhost"
+  port: 8000
+  quantum_service_port: 8001
+  timeout: 30  # Таймаут в секундах
+  max_retries: 3  # Максимальное количество повторных попыток
+
+# Настройки fallback
+fallback:
+  enabled: true
+  threshold_factor: 1.5  # Во сколько раз путь может быть хуже оценки
+  always_check_optimality: true
+
+# Настройки логирования
+logging:
+  file: "hybrid_router.log"
+  max_file_size: 10485760  # 10MB
+  backup_count: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
