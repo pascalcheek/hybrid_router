@@ -30,14 +30,14 @@ class APIClient:
         quantum_available = await self._check_health(self.quantum_service_url)
 
         if main_available:
-            logger.info(f"✓ Main server is available: {self.main_server_url}")
+            logger.info(f"Main server is available: {self.main_server_url}")
         else:
-            logger.warning(f"✗ Main server is not available: {self.main_server_url}")
+            logger.warning(f"Main server is not available: {self.main_server_url}")
 
         if quantum_available:
-            logger.info(f"✓ Quantum service is available: {self.quantum_service_url}")
+            logger.info(f"Quantum service is available: {self.quantum_service_url}")
         else:
-            logger.warning(f"✗ Quantum service is not available: {self.quantum_service_url}")
+            logger.warning(f"Quantum service is not available: {self.quantum_service_url}")
 
         return main_available
 
