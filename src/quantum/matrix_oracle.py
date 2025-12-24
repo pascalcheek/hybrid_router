@@ -57,10 +57,8 @@ class MatrixOracle:
         start_time = time.time()
         self.calls += 1
 
-        # ВСЕГДА вычисляем elapsed в конце и добавляем к quantum_time
         try:
             if not vertex_f_values:
-                # Пустой вход - возвращаем пустой результат, но время все равно учитываем
                 probabilities = []
                 found = False
                 return found, probabilities
@@ -76,18 +74,21 @@ class MatrixOracle:
 
             # Начальное состояние: равномерная суперпозиция
             initial_state = np.zeros(actual_size, dtype=complex)
-            for i in range(min(n_vertices, actual_size)):
-                initial_state[i] = 1 / math.sqrt(n_vertices)
-            initial_state = initial_state / np.linalg.norm(initial_state)
+            initial_state[0] = 1.0  # |0...0⟩ состояние
+
+            # Применяем преобразование адмара для создания равномерной суперпозиции
+            state = H @ initial_state
 
             # Оптимальное число итераций Гровера
             if iterations is None:
                 marked_count = sum(1 for f in vertex_f_values if f < threshold)
                 if marked_count == 0:
+                    # Если нет хороших вершин, возвращаем равномерное распределение
                     probabilities = [1.0 / n_vertices] * n_vertices if n_vertices > 0 else []
                     found = False
                     return found, probabilities
                 if marked_count == n_vertices:
+                    # Если все вершины хорошие, возвращаем равномерное распределение
                     probabilities = [1.0 / n_vertices] * n_vertices if n_vertices > 0 else []
                     found = True
                     return found, probabilities
@@ -96,19 +97,33 @@ class MatrixOracle:
                 iterations = int(math.pi / (4 * theta))
                 iterations = max(1, min(iterations, 5))
 
+                print(f"Отладка: n={n_vertices}, хороших={marked_count}, theta={theta:.4f}, итераций={iterations}")
+
             # Применяем итерации Гровера
-            state = initial_state.copy()
-            for _ in range(iterations):
-                state = oracle @ state
-                state = diffusion @ state
+            for iteration in range(iterations):
+                state = oracle @ state  # Применяем оракул (помечаем хорошие состояния)
+                state = diffusion @ state  # Применяем диффузию (усиливаем помеченные)
+
+                # Отладочная информация для каждой итерации
+                if False:  # Включить для отладки
+                    probs_temp = np.abs(state) ** 2
+                    probs_temp = probs_temp[:n_vertices]
+                    if np.sum(probs_temp) > 0:
+                        probs_temp = probs_temp / np.sum(probs_temp)
+                    max_prob = np.max(probs_temp)
+                    max_idx = np.argmax(probs_temp)
+                    print(f"  Итерация {iteration + 1}: макс p={max_prob:.4f} на вершине {max_idx}")
 
             # Вычисляем вероятности
             probabilities = np.abs(state) ** 2
             probabilities = probabilities[:n_vertices]
 
             # Нормализуем вероятности
-            if np.sum(probabilities) > 0:
-                probabilities = probabilities / np.sum(probabilities)
+            prob_sum = np.sum(probabilities)
+            if prob_sum > 0:
+                probabilities = probabilities / prob_sum
+            else:
+                probabilities = np.zeros_like(probabilities)
 
             # Определяем результат
             if len(probabilities) > 0:
@@ -120,6 +135,5 @@ class MatrixOracle:
             return found, probabilities.tolist()
 
         finally:
-            # всегда добавляем время, даже если была ошибка
             elapsed = time.time() - start_time
             self.quantum_time += elapsed
