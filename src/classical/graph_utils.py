@@ -63,7 +63,7 @@ def create_maze_graph() -> Graph:
     ]
     return Graph(vertices, edges)
 
-def create_test_graphs() -> List[Tuple[str, Graph]]:  # ← Now Tuple is defined!
+def create_test_graphs() -> List[Tuple[str, Graph]]:
     """Создание списка тестовых графов"""
     return [
         ("Граф с тупиковой ветвью", create_dead_end_graph()),
