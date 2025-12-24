@@ -10,7 +10,7 @@
 - [Запуск серверов](#-запуск-серверов)
 - [Структура проекта](#-структура-проекта)
 
-## Как это работает?
+# Как это работает?
 
 ### Основная идея
 
@@ -55,20 +55,20 @@ Start → A → B → Goal
 5. Найден оптимальный путь!
 ```
 
-## Установка
+# Установка
 
 ```bash
 pip install git+https://github.com/pascalcheek/hybrid_router  
 ```
-### Проверка установки
+## Проверка установки
 
 ```python
 import hybrid_router as hr
 print(f"Версия: {hr.__version__}")
 ```
 
-## Быстрый старт
-### Пример 1: Самый простой поиск пути
+# Быстрый старт
+## Пример 1: Самый простой поиск пути
 ```python
 import hybrid_router as hr
 
@@ -84,7 +84,7 @@ print(f"Посещено вершин: {metrics.total_nodes_visited}")
 print(f"Отсечено квантовым поиском: {metrics.pruned_nodes}")
 ```
 
-### Пример 2: Создание своего графа
+## Пример 2: Создание своего графа
 ```python
 import hybrid_router as hr
 
@@ -120,8 +120,8 @@ path, cost, metrics = hr.find_path(
 print(f"Путь: {path}")
 ```
 
-## Примеры использования
-### Сравнение стратегий
+# Примеры использования
+## Сравнение стратегий
 ```python
 import hybrid_router as hr
 
@@ -147,7 +147,7 @@ for strategy, data in results.items():
     print(f"  Отсечено: {data['pruned']}")
 ```
 
-### Работа с квантовыми оракулами напрямую
+## Работа с квантовыми оракулами напрямую
 ```python
 import hybrid_router as hr
 
@@ -164,22 +164,22 @@ found, probabilities = oracle.grover_search(f_values, threshold)
 print(f"Qiskit результат: {found}")
 print(f"Вероятности: {probabilities}")
 ```
-## Запуск серверов
+# Запуск серверов
 Система состоит из двух серверов:
 * Главный сервер (порт 8000) - Классический A* и координация
 * Квантовый сервис (порт 8001) - Алгоритм Гровера
 
-### Запуск в двух терминалах
-#### Терминал 1 - квантовый сервис:
+## Запуск в двух терминалах
+### Терминал 1 - квантовый сервис:
 ```bash
 python -m src.server.quantum_service --port 8001
 ```
-#### Терминал 2 - главный сервер:
+### Терминал 2 - главный сервер:
 ```bash
 python -m src.server.main_server --port 8000 --quantum-url http://localhost:8001
 ```
 
-### Использование через API клиент
+## Использование через API клиент
 ```python
 import asyncio
 import hybrid_router as hr
@@ -217,7 +217,7 @@ async def demo_api():
 asyncio.run(demo_api())
 ```
 
-## Структура проекта
+# Структура проекта
 ```
 hybrid_router/
 ├── src/
