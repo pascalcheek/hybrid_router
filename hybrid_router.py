@@ -34,7 +34,7 @@ from src.server.main_server import MainServer
 
 from src.client.api_client import APIClient
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "Khuri Pascal"
 
 
