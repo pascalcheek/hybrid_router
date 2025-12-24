@@ -36,7 +36,7 @@ try:
     # Для симулятора
     from qiskit_aer import Aer
 
-    # Для реального железа (Qiskit 1.0+)
+
     try:
         from qiskit_ibm_runtime import QiskitRuntimeService, Session, Sampler
 
@@ -80,7 +80,7 @@ class QiskitHardwareOracle:
         self._init_backend()
 
     def _init_backend(self):
-        """Инициализация бэкенда для Qiskit 1.0+"""
+        """Инициализация бэкенда для Qiskit"""
         try:
             # Определяем тип бэкенда
             if self.backend_name in ["aer_simulator", "simulator"] or "simulator" in self.backend_name.lower():
@@ -151,16 +151,16 @@ class QiskitHardwareOracle:
                 status = self.backend.status()
 
                 logger.info("Информация о бэкенде:")
-                logger.info(f"  • Имя: {self.backend.name}")
-                logger.info(f"  • Кубитов: {config.n_qubits}")
-                logger.info(f"  • Симулятор: {config.simulator}")
+                logger.info(f"  Имя: {self.backend.name}")
+                logger.info(f"  Кубитов: {config.n_qubits}")
+                logger.info(f"  Симулятор: {config.simulator}")
                 if hasattr(status, 'operational'):
-                    logger.info(f"  • Операционный: {status.operational}")
+                    logger.info(f"   Операционный: {status.operational}")
                 if hasattr(status, 'pending_jobs'):
-                    logger.info(f"  • Очередь: {status.pending_jobs} заданий")
+                    logger.info(f"   Очередь: {status.pending_jobs} заданий")
 
                 if hasattr(config, 'basis_gates'):
-                    logger.info(f"  • Базовые гейты: {config.basis_gates[:5]}...")
+                    logger.info(f"   Базовые гейты: {config.basis_gates[:5]}...")
 
         except Exception as e:
             logger.warning(f"Не удалось получить информацию о бэкенде: {e}")
@@ -207,7 +207,7 @@ class QiskitHardwareOracle:
         return diffusion_circuit
 
     def grover_search(self, f_values: List[float], threshold: float, iterations: int = None):
-        """Алгоритм Гровера на Qiskit 1.0+"""
+        """Алгоритм Гровера на Qiskit 1.0"""
         start_time = time.time()
         self.calls += 1
 
