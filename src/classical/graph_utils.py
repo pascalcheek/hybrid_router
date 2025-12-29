@@ -3,7 +3,7 @@
 """
 
 from ..architecture import Graph, Vertex, Edge
-from typing import List, Tuple  # ← ADD THIS IMPORT HERE
+from typing import List, Tuple
 
 def create_dead_end_graph() -> Graph:
     """Граф с явной тупиковой ветвью для демонстрации эффекта отсечения"""
